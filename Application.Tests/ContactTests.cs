@@ -6,7 +6,7 @@ using Persistence;
 
 namespace Application.Tests
 {
-    public class ContactTests
+    public class ContactTests : IDisposable
     {
         private IMapper mapper;
         private readonly List<Contact> contacts;
@@ -79,6 +79,14 @@ namespace Application.Tests
                 // Assert
                 Assert.True(result.IsSuccess);
                 Assert.Equivalent(returnContact, result.Value);
+            }
+        }
+
+        public void Dispose()
+        {
+            using (var context = new DataContext(CreateNewInMemoryDatabase()))
+            {
+                context.Database.EnsureDeleted();
             }
         }
     }
